@@ -74,6 +74,17 @@
       "balance": 75369,
       "createdAt": "2020-02-11T21:26:46.510Z",
       "modifiedAt": "2020-05-21T15:15:33.944Z"
+    },
+    {
+      "id": "5LXc19Zbo",
+      "uuid": "7b29867d-2445-4533-b6d9-534cd0ed20e6",
+      "firstName": "Day",
+      "lastName": "Ranran",
+      "username": "QAJoy99",
+      "password": "$2a$10$hqQKY6kWHMWmgdc5jxt.ke7XtZg2GcvxWcthAB4NG/OYJlQOM5/WO",
+      "balance": 0,
+      "createdAt": "2023-01-04T14:39:04.402Z",
+      "modifiedAt": "2023-01-04T14:39:04.402Z"
     }
   ],
   "contacts": [
@@ -253,6 +264,17 @@
       "isDeleted": false,
       "createdAt": "2019-09-30T14:20:07.043Z",
       "modifiedAt": "2020-05-21T22:40:28.910Z"
+    },
+    {
+      "id": "X0Mp3rqTr",
+      "uuid": "14591e1e-345d-4887-bf3c-706f84550bda",
+      "userId": "5LXc19Zbo",
+      "bankName": "New Back (TEST)",
+      "accountNumber": "987654321",
+      "routingNumber": "123456789",
+      "isDeleted": false,
+      "createdAt": "2023-01-04T14:39:07.001Z",
+      "modifiedAt": "2023-01-04T14:39:07.001Z"
     }
   ],
   "transactions": [

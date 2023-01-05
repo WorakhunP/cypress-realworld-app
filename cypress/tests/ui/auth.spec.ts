@@ -171,4 +171,114 @@ describe("User Sign-up and Login", function () {
       .and("have.text", "Username or password is invalid");
     cy.visualSnapshot("Sign In, Invalid Username, Username or Password is Invalid");
   });
+
+  it.only("TEST: should allow a visitor to sign-up, login, and logout", () => {
+    const userInfo = {
+      firstName: "Day",
+      lastName: "Ranran",
+      username: "QAJoy99",
+      password: "s3cret",
+    }
+  
+    // Sign-up User
+    cy.visit("/")
+  
+    cy.getBySel("signup").click()
+    cy.getBySel("signup-title").should("be.visible").and("contain", "Sign Up")
+    cy.visualSnapshot("Sign Up Title")
+
+    cy.url().should('eq','http://localhost:3000/signup')
+    // cy.get('#firstName').type(userInfo.firstName)
+    // cy.get('#lastName').type(userInfo.lastName)
+    // cy.get('#username').type(userInfo.username)
+    // cy.get('#password').type(userInfo.password)
+    // cy.get('#confirmPassword').type(userInfo.password)
+    cy.getBySel("signup-first-name").type(userInfo.firstName)
+    cy.getBySel("signup-last-name").type(userInfo.lastName)
+    cy.getBySel("signup-username").type(userInfo.username)
+    cy.getBySel("signup-password").type(userInfo.password)
+    cy.getBySel("signup-confirmPassword").type(userInfo.password)
+    cy.visualSnapshot("TEST: About to Sign Up")
+    cy.getBySel("signup-submit").click()
+    cy.wait("@signup")
+    
+    // cy.getBySel("signup-first-name").type(userInfo.firstName)
+    // cy.getBySel("signup-last-name").type(userInfo.lastName)
+    // cy.getBySel("signup-username").type(userInfo.username)
+    // cy.getBySel("signup-password").type(userInfo.password)
+    // cy.getBySel("signup-confirmPassword").type(userInfo.password)
+    // cy.visualSnapshot("About to Sign Up")
+    // cy.getBySel("signup-submit").click()
+    // cy.wait("@signup")
+  
+    // Login User
+
+    cy.url().should('eq','http://localhost:3000/signin')
+    cy.log("TEST LOGIN a new user")
+    cy.login(userInfo.username, userInfo.password)
+    cy.url()
+
+    cy.getBySel("user-onboarding-dialog").should("be.visible")
+    cy.getBySel("user-onboarding-dialog-title").should("contain", "Get Started with Real World App")
+    cy.getBySel("user-onboarding-dialog-content").should(
+      "contain","Real World App requires a Bank Account to perform transactions.")
+    cy.getBySel("nav-top-notifications-count").should("be.visible")
+    cy.visualSnapshot("User Onboarding Dialog")
+    cy.getBySel("user-onboarding-next").should("be.visible").click()
+
+    cy.getBySel("user-onboarding-dialog-title").should("contain",'Create Bank Account')
+    cy.getBySel('bankaccount-bankName-input').type("New Back (TEST)")
+    cy.getBySel('bankaccount-routingNumber-input').type("123456789")
+    cy.getBySel('bankaccount-accountNumber-input').type("987654321")  
+    cy.visualSnapshot("About to complete User Onboarding")
+    cy.getBySel('bankaccount-submit').click()
+
+    cy.wait("@gqlCreateBankAccountMutation")
+
+    cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished")
+    cy.getBySel("user-onboarding-dialog-content").should("contain","You're all set!")
+    cy.visualSnapshot("Finished User Onboarding")
+    cy.getBySel("user-onboarding-next").click()
+
+    cy.getBySel("transaction-list").should("be.visible")
+    cy.visualSnapshot("Transaction List is visible after User Onboarding")
+    // // Onboarding
+    // cy.getBySel("user-onboarding-dialog").should("be.visible")
+    // cy.getBySel("list-skeleton").should("not.exist")
+    // cy.getBySel("nav-top-notifications-count").should("exist")
+    // cy.visualSnapshot("User Onboarding Dialog")
+    // cy.getBySel("user-onboarding-next").click()
+  
+    // cy.getBySel("user-onboarding-dialog-title").should(
+    //   "contain",
+    //   "Create Bank Account"
+    // )
+  
+    // cy.getBySelLike("bankName-input").type("The Best Bank")
+    // cy.getBySelLike("accountNumber-input").type("123456789")
+    // cy.getBySelLike("routingNumber-input").type("987654321")
+    // cy.visualSnapshot("About to complete User Onboarding")
+    // cy.getBySelLike("submit").click()
+  
+    // cy.wait("@gqlCreateBankAccountMutation")
+  
+    // cy.getBySel("user-onboarding-dialog-title").should("contain", "Finished")
+    // cy.getBySel("user-onboarding-dialog-content").should(
+    //   "contain",
+    //   "You're all set!"
+    // )
+    // cy.visualSnapshot("Finished User Onboarding")
+    // cy.getBySel("user-onboarding-next").click()
+  
+    // cy.getBySel("transaction-list").should("be.visible")
+    // cy.visualSnapshot("Transaction List is visible after User Onboarding")
+  
+    // Logout User
+    if (isMobile()) {
+      cy.getBySel("sidenav-toggle").click()
+    }
+    cy.getBySel("sidenav-signout").click()
+    cy.location("pathname").should("eq", "/signin")
+    cy.visualSnapshot("Redirect to SignIn")
+  });
 });
